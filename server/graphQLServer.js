@@ -41,7 +41,10 @@ let idCount = links.length
 const resolvers = {
   Query: {
     info: () => `This is the API of Chris's GraphQL server`,
-    feed: () => links, // the feed will return the array of feed links.
+    feed: () => {
+      console.log('happened')
+      return links
+    }, // the feed will return the array of feed links.
     link: (parent, args) => {
       const filteredArr = links.filter(item => item.id === args.id)
       return filteredArr[0]
@@ -84,9 +87,15 @@ const resolvers = {
   }
 }
 
+const opts = {
+  port: 4000,
+  endpoint: '/graphql'
+}
+
 const server = new GraphQLServer({
   typeDefs, //// or you could include a file path here to a schema: './schema.graphql',
-  resolvers
+  resolvers,
+  opts
 })
 
 server.get("/api/test", (req, res) => {
